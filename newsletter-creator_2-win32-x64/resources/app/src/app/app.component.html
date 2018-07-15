@@ -1,0 +1,80 @@
+<clr-main-container>
+  <clr-header class="header-container">
+    <div class="header-nav" [clr-nav-level]="2">
+      <!-- here superior menu options (like different editor theming) can be added-->
+    </div>
+  </clr-header>
+  <div class="content-container">
+
+    <!-- navbar-->
+    <nav class="sidenav" [clr-nav-level]="1">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <button class="btn btn-primary" (click)="onAdd('TEXT')">Text</button>
+        <button class="btn btn-primary" (click)="onAdd('PICTURE')">Picture</button>
+        <button class="btn btn-primary" (click)="onAdd('PICTURETEXT')">Picture | Text</button>
+        <button class="btn btn-primary" (click)="onAdd('TEXTPICTURE')">Text | Picture</button>
+        <button class="btn btn-primary" (click)="onAdd('HORIZONTALSEPERATOR')">Seperator</button>
+      </div>
+    </nav>
+
+    <!-- content area on the right of the navbar-->
+    <main class="content-area">
+
+      <app-preview></app-preview>
+
+      <button id="create-button" class="btn btn-primary .btn-icon" (click)="onCreateHtmlClicked()">
+        <clr-icon shape="wand"></clr-icon>
+        create html
+      </button>
+
+      <app-edit></app-edit>
+
+
+    </main>
+  </div>
+
+
+</clr-main-container>
+
+<!-- within the modal the user can manually edit the created html-code awa copy it to the clipboard-->
+<clr-modal [(clrModalOpen)]="showCodeModal" [clrModalSize]="'xl'" [clrModalStaticBackdrop]="true" [clrModalClosable]="false">
+  <h3 class="modal-title">Code Preview</h3>
+  <div class="modal-body">
+    <div class="main-container">
+      <div class="content-container">
+        <textarea [(ngModel)]="htmlCode" id="textArea" #copyTarget type="text" style="height: 60vh;"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="showLeaveModal = true;">Cancel</button>
+    <button type="button" class="btn btn-primary" [ngxClipboard]="copyTarget">Copy Code</button>
+    <button type="button" class="btn btn-primary" (click)="onShowPreviewClicked()">Show Preview</button>
+  </div>
+</clr-modal>
+
+<!-- this modal shows the user a preview of the html code he created-->
+<clr-modal [(clrModalOpen)]="showPreviewModal" [clrModalSize]="'xl'">
+  <h3 class="modal-title">Newsletter Preview</h3>
+  <div class="modal-body">
+    <div #previewContainer></div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="showLeaveModal = true;">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="showPreviewModal = false; showCodeModal = true;">Back</button>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="showLeaveModal" [clrModalSize]="'sm'" [clrModalStaticBackdrop]="true">
+<h3 class="modal-title">Are you sure you want to leave this site?</h3>
+<div class="modal-body">
+  <p>
+    All the changes you made on your code will be lost...
+  </p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-warning" (click)="showLeaveModal = false;
+      showCodeModal = false; showPreviewModal = false;">Leave</button>
+    <button type="button" class="btn btn-primary" (click)="showLeaveModal = false;">Back</button>
+</div>
+</clr-modal>
